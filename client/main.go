@@ -7,13 +7,13 @@ import (
 	"os"
 	"time"
 
-	helloworld "go-envoy/gen/services/helloworld"
+	helloworld "go-envoy.com/gen/services/helloworld"
 
 	"google.golang.org/grpc"
 )
 
 const (
-	defaultName = "world"
+	defaultName = ""
 )
 
 func main() {
@@ -32,8 +32,8 @@ func main() {
 	c := helloworld.NewGreeterClient(conn)
 
 	// Contact the server and print out its response.
-	name := defaultName
-	if len(os.Args) > 1 {
+	name := ""
+	if len(os.Args) > 2 {
 		name = os.Args[1]
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)

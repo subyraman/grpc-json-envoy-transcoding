@@ -4,18 +4,30 @@ WORKDIR $GOPATH/src/go-envoy
 
 EXPOSE 50051
 
-COPY server .
+RUN apt-get update && apt-get install -y netcat dnsutils
+
+COPY go.mod .
+COPY go.sum .
+
+RUN go mod download
+
+
+COPY server $GOPATH/src/go-envoy/server
 COPY gen $GOPATH/src/go-envoy/gen
 COPY client $GOPATH/src/go-envoy/client
 
-RUN ls -ls
-RUN go get ./...
-RUN go build main.go
+COPY lib/bin/* /usr/local/bin
+COPY lib/include/google /usr/local/include/google
 
+RUN go get github.com/golang/protobuf/protoc-gen-go
+
+RUN mkdir /data
+COPY proto /data/proto
+
+RUN protoc -I /data/proto /data/proto/services/helloworld/helloworld.proto --go_out=plugins=grpc:./gen
+
+RUN go build -o server/main server/main.go
 RUN go build -o client/main client/main.go 
 
-RUN apt-get update
-RUN apt-get install -y netcat dnsutils
-
 # Run the executable
-CMD ["./main"]
+CMD ["./server/main"]

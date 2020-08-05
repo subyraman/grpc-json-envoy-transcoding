@@ -1,12 +1,12 @@
 FROM envoyproxy/envoy-dev
-COPY envoy/envoy.yaml /etc/envoy/envoy.yaml
-
 RUN apt-get update && apt-get install -y netcat dnsutils
 
-COPY vendor/bin/* /usr/local/bin
-COPY vendor/include/google /usr/local/include/google
+COPY envoy/envoy.yaml /etc/envoy/envoy.yaml
+
+
+COPY lib/bin/* /usr/local/bin
+COPY lib/include/google /usr/local/include/google
 
 RUN mkdir /data
 COPY proto /data/proto
-RUN ls -ls /data/proto
 RUN protoc -I /data/proto --include_imports --include_source_info --descriptor_set_out=/data/descriptor.pb /data/proto/services/helloworld/helloworld.proto
