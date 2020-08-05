@@ -11,7 +11,7 @@ docker-compose build
 ### Running the services:
 
 ```
-docker-compose run
+docker-compose up
 ```
 
 This will run two containers: an `envoy` container, exposed on the host at `0.0.0.0:10000`. JSON traffic is transcoded and proxied to the `grpc-api` container. 
