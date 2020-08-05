@@ -32,6 +32,12 @@ This will run `client/main` in the `grpc-api` container, which will send a GRPC 
 docker-compose run grpc-api client/main envoy:10000 Suby
 ```
 
+### Errors
+
+Supplying an empty name will return an error:
+
+`curl 0.0.0.0:10000/say -d '{"name": ""}'`
+
 ## Building/running locally
 
 If you wish to build the Go server/client locally, you will need to install the [protobuf compiler](https://github.com/protocolbuffers/protobuf) and [protobuf-gen-go](https://developers.google.com/protocol-buffers/docs/reference/go-generated).
