@@ -1,0 +1,21 @@
+FROM golang:1.13
+
+WORKDIR $GOPATH/src/go-envoy
+
+EXPOSE 50051
+
+COPY server .
+COPY gen $GOPATH/src/go-envoy/gen
+COPY client $GOPATH/src/go-envoy/client
+
+RUN ls -ls
+RUN go get ./...
+RUN go build main.go
+
+RUN go build -o client/main client/main.go 
+
+RUN apt-get update
+RUN apt-get install -y netcat dnsutils
+
+# Run the executable
+CMD ["./main"]
